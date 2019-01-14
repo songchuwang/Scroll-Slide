@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body,
+    ul,
+    li,
+    a,
+    p,
+    div {
+      padding: 0px;
+      margin: 0px;
+      font-size: 14px;
+    }
+
+    #wrap {
+      overflow: hidden;
+      width: 100%;
+    }
+
+    #main {
+      height: 2944px;
+      top: 0;
+      position: relative;
+    }
+
+    .page {
+      width: 100%;
+      margin: 0;
+      font-size: 80px;
+      
+    }
+
+    #page1 {
+      background: #E4E6CE;
+    }
+
+    #page2 {
+      background: #6CE26C;
+    }
+
+    #page3 {
+      background: red;
+    }
+
+    #page4 {
+      background: #2932E1;
+    }
+
+    #page5 {
+      background: green;
+    }
+
+
+  </style>
+</head>
+
+<body>
+  <div id="wrap">
+    <div id="main">
+      <div id="page1" class="page">1</div>
+      <div id="page2" class="page">2</div>
+      <div id="page3" class="page">3</div>
+      <div id="page4" class="page">4</div>
+      <div id="page5" class="page">5</div>
+    </div>
+  </div>
+  <script src="./jquery.js"></script>
+  <script>
+    var wrap = document.querySelector('#wrap')
+    var main = document.querySelector('#main')
+    var page = document.querySelectorAll('.page')
+
+    var startTime = 0,
+      endTime = 0,
+      now = 0;
+
+    var clientHeight = document.body.clientHeight
+
+    wrap.style.height = clientHeight + 'px';
+    for (let i = 0; i < page.length; i++) {
+      page[i].style.height = clientHeight + 'px'
+      console.log(page[i].style.height);
+
+    }
+
+    if (navigator.userAgent.toLowerCase().indexOf('firefox') != -1) {
+      document.addEventListener('DOMMouseScroll', scrollFun, false)
+      // 非IE现代浏览器
+    } else if (document.addEventListener) {
+      document.addEventListener('mousewheel', scrollFun, false)
+    } else if (document.attachEvent) {
+      document.attachEvent('onmousewheel', scrollFun, false)
+    } else {
+      document.onmousewheel = scrollFun;
+    }
+
+    function scrollFun(e) {
+      startTime = new Date().getTime()
+      var delta = e.detail || (-e.wheelDelta)
+      if ((endTime - startTime) < -1000) {
+        if (delta > 0 && parseInt(main.offsetTop) > -(clientHeight * (page.length - 1))) {
+          now = now - clientHeight;
+          toPage(now)
+        }
+        if (delta < 0 && parseInt(main.offsetTop) < 0) {
+          now = now + clientHeight;
+          toPage(now)
+        }
+        endTime = new Date().getTime()
+      } else {
+        e.preventDefault()
+      }
+    }
+
+    function toPage(e) {
+      $('#main').animate({
+        top: (e + 'px')
+      }, 1000)
+    }
+  </script>
+</body>
+
+</html>
